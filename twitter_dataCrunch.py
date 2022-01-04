@@ -33,17 +33,18 @@ def append_to_csv(json_response, fileName):
         tweet_id = tweet['id']  # 4. Tweet ID
         lang = tweet['lang']  # 5. Language
         source = tweet['source']  # 6. Source
-        text = tweet['text']  # 8. Tweet text - the actual status/text body of the tweet
+        text = tweet['text']  # Tweet text - the actual status/text body of the tweet
 
-        # 9. Tweet metrics
+
+        # Tweet metrics
         retweet_count = tweet['public_metrics']['retweet_count']
         reply_count = tweet['public_metrics']['reply_count']
         like_count = tweet['public_metrics']['like_count']
         quote_count = tweet['public_metrics']['quote_count']
 
         # Assemble all data in a list
-        tweet_data = [author_id, created_at, geo, tweet_id, lang, like_count, quote_count, reply_count, retweet_count, source,
-               text]
+        tweet_data = [author_id, created_at, geo, tweet_id, lang, like_count, quote_count,
+                      reply_count, retweet_count, source, text]
 
         # Append the result to the CSV file
         csvWriter.writerow(tweet_data)
