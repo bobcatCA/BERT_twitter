@@ -1,38 +1,6 @@
 # !/usr/bin/env python
 # coding: utf-8
 
-# # Sentiment Analysis with Deep Learning using BERT
-
-# ### Prerequisites
-
-# - Intermediate-level knowledge of Python 3 (NumPy and Pandas preferably, but not required)
-# - Exposure to PyTorch usage
-# - Basic understanding of Deep Learning and Language Models (BERT specifically)
-
-# ### Project Outline
-
-# **Task 1**: Introduction (this section)
-#
-# **Task 2**: Exploratory Data Analysis and Preprocessing
-#
-# **Task 3**: Training/Validation Split
-#
-# **Task 4**: Loading Tokenizer and Encoding our Data
-#
-# **Task 5**: Setting up BERT Pretrained Model
-#
-# **Task 6**: Creating Data Loaders
-#
-# **Task 7**: Setting Up Optimizer and Scheduler
-#
-# **Task 8**: Defining our Performance Metrics
-#
-# **Task 9**: Creating our Training Loop
-#
-# **Task 10**: Loading and Evaluating our Model
-
-# ## Task 1: Introduction
-
 import torch
 import numpy as np
 import pandas as pd
@@ -51,7 +19,7 @@ from torch.utils.data import DataLoader, RandomSampler, SequentialSampler
 # df = pd.read_csv('smile-annotations-final.csv', names=['id', 'text', 'category'])
 df = pd.read_csv('kaggle_1.6MMtwtr_noemoticon.csv', encoding='latin1',
                         names=['category', 'id', 'date', 'query', 'user', 'text'])
-df = df.sample(n=int(1E4), random_state=1)
+df = df.sample(n=int(1E3), random_state=1)
 
 df.head()
 df.text.iloc[0]

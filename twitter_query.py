@@ -1,6 +1,6 @@
 # twitter_query.py
 
-from twitter_auth import *
+from twitter_pulltocsv import *
 import requests
 import os
 
