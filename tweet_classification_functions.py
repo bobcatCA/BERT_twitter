@@ -7,7 +7,7 @@ import torch
 import tqdm
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import f1_score
-from tqdm.notebook import tqdm
+from tqdm import tqdm
 from transformers import BertTokenizer
 
 
@@ -104,7 +104,7 @@ def evaluate(model, dataloader):
     loss_val_total = 0  # Initialize loss, predictions
     predictions, true_vals = [], []
 
-    for batch in tqdm.tqdm(dataloader):  # Loop over all batches in dataloader
+    for batch in tqdm(dataloader):  # Loop over all batches in dataloader
 
         # Make batch a tuple of input id's, attention mask, and label tensors
         batch = tuple(b.to(device) for b in batch)

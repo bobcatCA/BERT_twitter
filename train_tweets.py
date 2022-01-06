@@ -5,6 +5,7 @@
 
 import pandas as pd
 import random
+from tqdm import tqdm
 from transformers import BertForSequenceClassification
 from transformers import AdamW
 from transformers import get_linear_schedule_with_warmup
@@ -16,7 +17,8 @@ from tweet_classification_functions import *
 # Load tweets into df
 df = pd.read_csv('kaggle_1.6MMtwtr_noemoticon.csv', encoding='latin1',
                         names=['category', 'id', 'date', 'query', 'user', 'text'])
-df = df.sample(n=int(1E3), random_state=1)
+df = df.sample(n=int(1E4), random_state=1)
+df.category = df.category.replace([0, 4], ['positive', 'negative'])
 
 # Transform df into useful objects to feed into model (see data_initializer() function)
 tokenizer, df, encoded_data_train, encoded_data_val, label_dict = data_initialization(df)
@@ -75,12 +77,14 @@ model.to(device)
 
 # Enter main training loop. Go over range of epochs
 for epoch in tqdm(range(1, epochs+1)):
-
     model.train()  # Put model into train mode (vs
-    loss_train_total = 0
+    loss_train_total = 0  # Initialize training loss
+
+    # Set TQDM progress bar, set to refresh at same position each iteration
     progress_bar = tqdm(dataloader_train,
                         desc='Epoch {:1d}'.format(epoch),
-                        leave=False,
+                        position=0,
+                        leave=True,
                         disable=False)
 
     for batch in progress_bar:
@@ -103,8 +107,7 @@ for epoch in tqdm(range(1, epochs+1)):
         # Take steps and set progress bar
         optimizer.step()
         scheduler.step()
-        progress_bar.set_postfix({'training loss': '{:.3f}'.format(loss.item()/len(batch)
-                )})
+        progress_bar.set_postfix({'training loss': '{:.3f}'.format(loss.item()/len(batch))})
     # Save model at the end of each epoch
     torch.save(model.state_dict(), f'BERT_ft_epoch{epoch}_binary.model')
 
@@ -112,7 +115,7 @@ for epoch in tqdm(range(1, epochs+1)):
     tqdm.write('\nEpoch {epoch}')
     loss_train_avg = loss_train_total/len(dataloader_train)
     tqdm.write(f'Training loss: {loss_train_avg}')
-    val_loss, predictions, true_vals = evaluate(dataloader_val)
+    val_loss, predictions, true_vals = evaluate(model, dataloader_val)
     val_f1 = f1_score_func(predictions, true_vals)
     tqdm.write(f'Validation loss: {val_loss}')
     tqdm.write(f'F1 Score (weighted): {val_f1}')

@@ -54,9 +54,6 @@ attention_masks = encoded_data['attention_mask']  # Contains the text vs. blank 
 
 labels = torch.tensor(df.label.values)
 dataset = TensorDataset(input_ids, attention_masks, labels)
-dataset = TensorDataset(input_ids, attention_masks)
-
-
 dataloader = DataLoader(dataset, sampler=None)  # Pedantic for not sampling but keep for now
 
 # Load pre-trained model
@@ -70,7 +67,7 @@ model.load_state_dict(torch.load('BERT_ft_epoch3_binary.model', map_location=tor
                       strict=False)
 
 # Get results
-if labeled_dataset == True:
+if labeled_dataset:
     _, predictions, true_vals = evaluate_single(model, dataloader)
     accuracy_per_class(predictions, true_vals, label_dict)
 else:
