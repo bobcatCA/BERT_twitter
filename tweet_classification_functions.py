@@ -4,7 +4,6 @@
 # Libraries to be imported
 import numpy as np
 import torch
-import tqdm
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import f1_score
 from tqdm import tqdm
@@ -97,14 +96,13 @@ def evaluate(model, dataloader):
     :param dataloader: DataLoader instance (see PyTorch DataLoader documentation)
     :return: average loss (float), predictions (numpy array), true_vals, or labels, (numpy array)
     """
-    
     model.eval()  # Set model to evaluate mode (vs. train mode)
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')  # CPU for this computer
     model.to(device)
     loss_val_total = 0  # Initialize loss, predictions
     predictions, true_vals = [], []
 
-    for batch in tqdm(dataloader):  # Loop over all batches in dataloader
+    for batch in tqdm(dataloader, position=0, leave=True, disable=False):  # Loop over all batches in dataloader
 
         # Make batch a tuple of input id's, attention mask, and label tensors
         batch = tuple(b.to(device) for b in batch)

@@ -17,7 +17,7 @@ from tweet_classification_functions import *
 # Load tweets into df
 df = pd.read_csv('kaggle_1.6MMtwtr_noemoticon.csv', encoding='latin1',
                         names=['category', 'id', 'date', 'query', 'user', 'text'])
-df = df.sample(n=int(1E4), random_state=1)
+df = df.sample(n=int(50), random_state=1)
 df.category = df.category.replace([0, 4], ['positive', 'negative'])
 
 # Transform df into useful objects to feed into model (see data_initializer() function)
@@ -112,13 +112,13 @@ for epoch in tqdm(range(1, epochs+1)):
     torch.save(model.state_dict(), f'BERT_ft_epoch{epoch}_binary.model')
 
     # Display epoch/loss information
-    tqdm.write('\nEpoch {epoch}')
-    loss_train_avg = loss_train_total/len(dataloader_train)
-    tqdm.write(f'Training loss: {loss_train_avg}')
+    loss_train_avg = loss_train_total / len(dataloader_train)
+    tqdm.write(f'\nEpoch {epoch} Training Loss: {loss_train_avg}')
+    # tqdm.write(f'Training loss: {loss_train_avg}')  # Writes new line
     val_loss, predictions, true_vals = evaluate(model, dataloader_val)
     val_f1 = f1_score_func(predictions, true_vals)
-    tqdm.write(f'Validation loss: {val_loss}')
-    tqdm.write(f'F1 Score (weighted): {val_f1}')
+    print(f'Validation loss: {val_loss}')
+    print(f'F1 Score (weighted): {val_f1}')
 
 
 print('done')

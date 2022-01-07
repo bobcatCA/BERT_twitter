@@ -9,11 +9,11 @@ from torch.utils.data import DataLoader
 from tweet_classification_functions import *
 
 # Load tweets into Pandas DataFrame
-# df = pd.read_csv('kaggle_1.6MMtwtr_noemoticon.csv', encoding='latin1',
-#                         names=['category', 'id', 'date', 'query', 'user', 'text'])
-df = pd.read_csv('12.30_tweets.csv',
-                 names=['author_id', 'created_at', 'geo', 'tweet_id', 'lang', 'like_count', 'quote_count',
-                      'reply_count', 'retweet_count', 'source', 'text'])
+df = pd.read_csv('kaggle_1.6MMtwtr_noemoticon.csv', encoding='latin1',
+                        names=['category', 'id', 'date', 'query', 'user', 'text'])
+# df = pd.read_csv('12.30_tweets.csv',
+#                  names=['author_id', 'created_at', 'geo', 'tweet_id', 'lang', 'like_count', 'quote_count',
+#                       'reply_count', 'retweet_count', 'source', 'text'])
 df = df.sample(n=int(100), random_state=1)  # Downsample to reduce time
 
 # Get all possible labels - this might be pedantic for only binary classification
@@ -63,7 +63,7 @@ model = BertForSequenceClassification.from_pretrained("bert-base-uncased",
                                                       output_hidden_states=False)
 
 # Load pre-trained model
-model.load_state_dict(torch.load('BERT_ft_epoch3_binary.model', map_location=torch.device('cpu')),
+model.load_state_dict(torch.load('BERT_ft_epoch2_posneg10k.model', map_location=torch.device('cpu')),
                       strict=False)
 
 # Get results
